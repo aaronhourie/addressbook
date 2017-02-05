@@ -1,7 +1,7 @@
 package com.vaadin.tutorial.addressbook;
 
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.tutorial.addressbook.backend.Contact;
+import com.vaadin.tutorial.addressbook.backend.Task;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -21,22 +21,22 @@ import com.vaadin.v7.ui.TextField;
  * Similarly named field by naming convention or customized
  * with @PropertyId annotation.
  */
-public class ContactForm extends FormLayout {
+public class TaskForm extends FormLayout {
 
     Button save = new Button("Save", this::save);
     Button cancel = new Button("Cancel", this::cancel);
     TextField firstName = new TextField("First name");
     TextField lastName = new TextField("Last name");
-    TextField phone = new TextField("Phone");
-    TextField email = new TextField("Email");
-    DateField birthDate = new DateField("Birth date");
+    TextField task = new TextField("Task");
+    TextField startDate = new TextField("Start Date");
+    DateField endDate = new DateField("End date");
 
-    Contact contact;
+    Task contact;
 
     // Easily bind forms to beans and manage validation and buffering
-    BeanFieldGroup<Contact> formFieldBindings;
+    BeanFieldGroup<Task> formFieldBindings;
 
-    public ContactForm() {
+    public TaskForm() {
         configureComponents();
         buildLayout();
     }
@@ -60,7 +60,7 @@ public class ContactForm extends FormLayout {
         HorizontalLayout actions = new HorizontalLayout(save, cancel);
         actions.setSpacing(true);
 
-        addComponents(actions, firstName, lastName, phone, email, birthDate);
+        addComponents(actions, firstName, lastName, task, startDate, endDate);
     }
 
     /*
@@ -94,10 +94,10 @@ public class ContactForm extends FormLayout {
     public void cancel(Button.ClickEvent event) {
         // Place to call business logic.
         Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
-        getUI().contactList.select(null);
+        getUI().taskList.select(null);
     }
 
-    void edit(Contact contact) {
+    void edit(Task contact) {
         this.contact = contact;
         if (contact != null) {
             // Bind the properties of the contact POJO to fiels in this form
@@ -109,8 +109,8 @@ public class ContactForm extends FormLayout {
     }
 
     @Override
-    public AddressbookUI getUI() {
-        return (AddressbookUI) super.getUI();
+    public TaskBookUI getUI() {
+        return (TaskBookUI) super.getUI();
     }
 
 }
