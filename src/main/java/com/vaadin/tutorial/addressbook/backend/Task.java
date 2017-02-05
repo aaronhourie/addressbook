@@ -20,7 +20,7 @@ public class Task implements Serializable, Cloneable {
     private String firstName = "";
     private String lastName = "";
     private String task = "";
-    private String startDate = "";
+    private Date startDate;
     private Date endDate;
 
     public Long getId() {
@@ -51,24 +51,24 @@ public class Task implements Serializable, Cloneable {
         return task;
     }
 
-    public void setTask(String phone) {
-        this.task = phone;
+    public void setTask(String task) {
+        this.task = task;
     }
 
-    public String getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String email) {
-        this.startDate = email;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date birthDate) {
-        this.endDate = birthDate;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     @Override

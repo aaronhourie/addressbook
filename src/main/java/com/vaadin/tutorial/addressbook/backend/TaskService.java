@@ -38,11 +38,8 @@ public class TaskService {
                 Task contact = new Task();
                 contact.setFirstName(fnames[r.nextInt(fnames.length)]);
                 contact.setLastName(lnames[r.nextInt(fnames.length)]);
-                contact.setStartDate(contact.getFirstName().toLowerCase() + "@"
-                        + contact.getLastName().toLowerCase() + ".com");
                 contact.setTask("+ 358 555 " + (100 + r.nextInt(900)));
-                cal.set(1930 + r.nextInt(70),
-                        r.nextInt(11), r.nextInt(28));
+                contact.setStartDate(cal.getTime());
                 contact.setEndDate(cal.getTime());
                 contactService.save(contact);
             }
