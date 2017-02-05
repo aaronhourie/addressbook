@@ -24,7 +24,16 @@ public class TaskService {
             "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor",
             "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin",
             "Thompson", "Young", "King", "Robinson" };
-
+    
+    private static final String[] taskTypes = {"Having dinner", "Having lunch", "Meeting", 
+    		"Going to a Concert", "Tuba practice", "Custom pizza making", "Accordion playing", 
+    		"Art appreciation", "Painting", "Basket weaving", "Writing letters to the editor",
+    		"Driving a truck", "Looking at clouds", "Discussing politics", "Reading a book",
+    		"Listening to music", "Making pottery", "Going to the zoo", "Swimming with dolphins",
+    		"Pretending to be a snail", "Going fishing", "Going to the circus", "Reciting Lorem Ipsum",
+    		"Eating salads", "Judging a pie contest", "Making soup", "Feeding ducks", 
+    		"Learning about magnets", "Going mini-golfing", "Going bowling"};
+    
     private static TaskService instance;
 
     public static TaskService createDemoService() {
@@ -38,8 +47,12 @@ public class TaskService {
                 Task contact = new Task();
                 contact.setFirstName(fnames[r.nextInt(fnames.length)]);
                 contact.setLastName(lnames[r.nextInt(fnames.length)]);
-                contact.setTask("+ 358 555 " + (100 + r.nextInt(900)));
+                // Pull a task type and a name to generate a task. 
+                contact.setTask(taskTypes[r.nextInt(taskTypes.length)] + " with " + 
+                		fnames[r.nextInt(fnames.length)]);
                 contact.setStartDate(cal.getTime());
+                // Increment the day (All sample tasks are 1 day long)
+                cal.add(Calendar.DATE, 1);
                 contact.setEndDate(cal.getTime());
                 contactService.save(contact);
             }
@@ -49,18 +62,18 @@ public class TaskService {
         return instance;
     }
 
-    private HashMap<Long, Task> contacts = new HashMap<>();
+    private HashMap<Long, Task> tasks = new HashMap<>();
     private long nextId = 0;
 
     public synchronized List<Task> findAll(String stringFilter) {
         ArrayList arrayList = new ArrayList();
-        for (Task contact : contacts.values()) {
+        for (Task task : tasks.values()) {
             try {
                 boolean passesFilter = (stringFilter == null || stringFilter.isEmpty())
-                        || contact.toString().toLowerCase()
+                        || task.toString().toLowerCase()
                                 .contains(stringFilter.toLowerCase());
                 if (passesFilter) {
-                    arrayList.add(contact.clone());
+                    arrayList.add(task.clone());
                 }
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(TaskService.class.getName()).log(
@@ -78,11 +91,11 @@ public class TaskService {
     }
 
     public synchronized long count() {
-        return contacts.size();
+        return tasks.size();
     }
 
     public synchronized void delete(Task value) {
-        contacts.remove(value.getId());
+        tasks.remove(value.getId());
     }
 
     public synchronized void save(Task entry) {
@@ -94,7 +107,7 @@ public class TaskService {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        contacts.put(entry.getId(), entry);
+        tasks.put(entry.getId(), entry);
     }
 
 }
