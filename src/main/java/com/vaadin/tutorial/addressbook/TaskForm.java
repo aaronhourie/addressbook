@@ -25,13 +25,14 @@ public class TaskForm extends FormLayout {
 
     Button save = new Button("Save", this::save);
     Button cancel = new Button("Cancel", this::cancel);
+    Button delete = new Button("Delete", this::delete);
     TextField firstName = new TextField("First name");
     TextField lastName = new TextField("Last name");
-    TextField task = new TextField("Task");
+    TextField taskField = new TextField("Task");
     DateField startDate = new DateField("Start Date");
     DateField endDate = new DateField("End date");
 
-    Task contact;
+    Task task;
 
     // Easily bind forms to beans and manage validation and buffering
     BeanFieldGroup<Task> formFieldBindings;
@@ -57,10 +58,10 @@ public class TaskForm extends FormLayout {
         setSizeUndefined();
         setMargin(true);
 
-        HorizontalLayout actions = new HorizontalLayout(save, cancel);
+        HorizontalLayout actions = new HorizontalLayout(save, cancel, delete);
         actions.setSpacing(true);
 
-        addComponents(actions, firstName, lastName, task, startDate, endDate);
+        addComponents(actions, firstName, lastName, taskField, startDate, endDate);
     }
 
     /*
@@ -80,12 +81,12 @@ public class TaskForm extends FormLayout {
             formFieldBindings.commit();
 
             // Save DAO to backend with direct synchronous service API
-            getUI().service.save(contact);
+            getUI().service.save(task);
 
-            String msg = String.format("Saved '%s %s'.", contact.getFirstName(),
-                    contact.getLastName());
+            String msg = String.format("Saved '%s %s'.", task.getFirstName(),
+                    task.getLastName());
             Notification.show(msg, Type.TRAY_NOTIFICATION);
-            getUI().refreshContacts();
+            getUI().refreshTasks();
         } catch (FieldGroup.CommitException e) {
             // Validation exceptions could be shown here
         }
@@ -96,16 +97,32 @@ public class TaskForm extends FormLayout {
         Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
         getUI().taskList.select(null);
     }
+    
+    public void delete(Button.ClickEvent event) {
+    	
+        if (task != null) {
+        	getUI().service.delete(task);
+        	// Notify the user
+        	Notification.show("Deleted", Type.TRAY_NOTIFICATION);
+        	// Deselect the task.
+        	getUI().taskList.select(null);
+        	// Refresh the task list.
+        	getUI().refreshTasks();
+        	// Set the task to null.
+        	task = null;
+        }
+    }
 
-    void edit(Task contact) {
-        this.contact = contact;
-        if (contact != null) {
+    void edit(Task task) {
+        this.task = task;
+        if (task != null) {
             // Bind the properties of the contact POJO to fiels in this form
-            formFieldBindings = BeanFieldGroup.bindFieldsBuffered(contact,
+            formFieldBindings = BeanFieldGroup.bindFieldsBuffered(task,
                     this);
             firstName.focus();
+            delete.setVisible(true);
         }
-        setVisible(contact != null);
+        setVisible(task != null);
     }
 
     @Override

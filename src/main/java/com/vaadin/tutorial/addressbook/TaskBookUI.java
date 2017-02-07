@@ -83,7 +83,7 @@ public class TaskBookUI extends UI {
         taskList.setSelectionMode(Grid.SelectionMode.SINGLE);
         taskList.addSelectionListener(
                 e -> taskForm.edit((Task) taskList.getSelectedRow()));
-        refreshContacts();
+        refreshTasks();
     }
 
     /*
@@ -124,7 +124,7 @@ public class TaskBookUI extends UI {
      * your code into classes to easier maintenance. With Vaadin you can follow
      * MVC, MVP or any other design pattern you choose.
      */
-    void refreshContacts() {
+    void refreshTasks() {
         refreshContacts(filter.getValue());
     }
 
